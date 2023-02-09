@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { BiMessageAdd } from "react-icons/bi";
+import { RiDeleteBin5Fill, RiChatDeleteFill } from "react-icons/ri";
+import { AiFillEdit, AiOutlineFileDone } from "react-icons/ai";
 
 export default function ToDoApp() {
   const [text, setText] = useState({ work: "" });
@@ -85,41 +88,52 @@ export default function ToDoApp() {
 
   return (
     <div className="todo-body">
-      <input
-        type="text"
-        placeholder="Enter Item"
-        onChange={(e) => {
-          flag
-            ? setText({ id: id, work: e.target.value })
-            : setText({ ...text, work: e.target.value });
-        }}
-        value={text.work}
-      />
-      {flag ? (
-        <button
-          onClick={() => {
-            CallPostApi();
+      <h2>ToDo Application</h2>
+      <div className="input_container">
+        <input
+          className="input_field"
+          type="text"
+          placeholder="Enter Item"
+          onChange={(e) => {
+            flag
+              ? setText({ id: id, work: e.target.value })
+              : setText({ ...text, work: e.target.value });
           }}
-        >
-          Add
+          value={text.work}
+        />
+        {flag ? (
+          <button
+            onClick={() => {
+              CallPostApi();
+            }}
+          >
+            <BiMessageAdd />
+          </button>
+        ) : (
+          <button
+            onClick={() => {
+              CallPutApi();
+            }}
+          >
+            <AiOutlineFileDone />
+          </button>
+        )}
+        <button onClick={() => CallDeleteAllApi()}>
+          <RiDeleteBin5Fill />
         </button>
-      ) : (
-        <button
-          onClick={() => {
-            CallPutApi();
-          }}
-        >
-          Update
-        </button>
-      )}
-      <button onClick={() => CallDeleteAllApi()}>-</button>
+      </div>
       {task ? (
         task.map((item, index) => {
           return (
-            <div key={item.id}>
-              {item.work}
-              <button onClick={() => handleEdit(item.id)}>edit</button>
-              <button onClick={() => handleDelete(item.id)}>-</button>
+            <div key={item.id} className="listed_item_container">
+              <span>{item.work}</span>
+
+              <button onClick={() => handleEdit(item.id)}>
+                <AiFillEdit />
+              </button>
+              <button onClick={() => handleDelete(item.id)}>
+                <RiChatDeleteFill />
+              </button>
             </div>
           );
         })
